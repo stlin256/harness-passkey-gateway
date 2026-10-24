@@ -101,3 +101,11 @@ The initial deployment used Node.js 24.22.1, openid-client 6.8.8, Pocket ID 2.19
 ## Validation boundary
 
 Syntax validation is not an authentication security audit. Verify the full login, callback, HTTP, streaming, WebSocket, expiry, revocation, browser behavior and restore process for your deployment before granting other users access. This project does not provide a multi-user isolation boundary inside a shared Harness instance.
+
+## Reusing the identity provider for Proxmox VE
+
+Proxmox VE can use Pocket ID through its native OIDC realm. Create a separate confidential client, enable PKCE, and register the exact public origin as its callback (PVE sends the origin without a trailing slash). Bind a pre-created PVE user to the stable subject, disable automatic user creation, and assign explicit permissions. This does not use the Harness token bridge or inherit its 90-day session lifetime.
+
+A separate HTTPS virtual host can share the same TCP ingress port. Use a hostname that is not already mapped to loopback for a local SSH tunnel. Include it in automated certificate renewal. Verify the upstream PVE certificate with the correct TLS server name; do not disable certificate checks. Preserve authenticated WebSocket upgrades and use same-origin framing policy for embedded consoles.
+
+Keep a private recovery path: an identity provider running inside a managed VM cannot authenticate users while that VM is stopped. Existing PAM/SSH recovery should remain available through the private path.

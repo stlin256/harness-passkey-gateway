@@ -1,5 +1,6 @@
 {
     # Only TLS is forwarded through FRP. DNS-01 renewal runs separately.
+    grace_period 5s
     admin off
     auto_https off
     https_port 8443
