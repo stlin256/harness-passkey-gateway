@@ -94,6 +94,10 @@ The list contains session hashes, timestamps, a subject and a user-agent label; 
 
 Disable public ingress first for rollback. The original loopback Harness server and SSH access can continue independently. Restore a matched database/configuration backup for identity recovery; changing the identity origin requires credential re-enrollment.
 
+## Reference versions
+
+The initial deployment used Node.js 24.22.1, openid-client 6.8.8, Pocket ID 2.19.1, Caddy 2.11.7, and DeepSeek Harness 0.2.1-rc.2. Harness is a prerelease; its launch adapter may change. FRP 0.67.0 was retained for compatibility with its existing relay. Check upstream support and advisories before adopting these versions.
+
 ## Validation boundary
 
 Syntax validation is not an authentication security audit. Verify the full login, callback, HTTP, streaming, WebSocket, expiry, revocation, browser behavior and restore process for your deployment before granting other users access. This project does not provide a multi-user isolation boundary inside a shared Harness instance.

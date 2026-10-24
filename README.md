@@ -6,7 +6,7 @@
 
 [中文](readme_zh.md) · [Architecture](docs/architecture.md) · [Deploy](docs/deployment.md) · [Security](SECURITY.md)
 
-![Status](https://img.shields.io/badge/status-in%20development-amber)
+![Status](https://img.shields.io/badge/status-early%20access-blue)
 ![Runtime](https://img.shields.io/badge/Node.js-24%20LTS-43853d)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -14,7 +14,7 @@
 
 A small, self-hosted access gateway for **DeepSeek Harness**. Sign in with a passkey through an OpenID Connect provider such as **Pocket ID**, then use the Harness browser interface without exposing its process launch token.
 
-> Early implementation. Deployment templates are provided; device enrollment and end-to-end authentication require operator validation. This project is independent of DeepSeek, Pocket ID, Cloudflare, and frp.
+> Early implementation. A single-owner deployment has completed human Passkey enrollment and browser sign-in. This is not a security audit; validate your own environment before use. This project is independent of DeepSeek, Pocket ID, Cloudflare, and frp.
 
 ## Goals
 

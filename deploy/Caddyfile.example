@@ -3,6 +3,10 @@
     admin off
     auto_https off
     https_port 8443
+    # A TCP-only FRP tunnel cannot carry QUIC / HTTP/3.
+    servers {
+        protocols h1 h2
+    }
     # Redact URLs/queries from unexpected reverse-proxy error logs.
     log default {
         level FATAL
