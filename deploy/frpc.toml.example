@@ -1,0 +1,11 @@
+serverAddr = "relay.example.com"
+serverPort = 7000
+auth.token = "REPLACE_WITH_EXISTING_RELAY_TOKEN"
+transport.tls.enable = true
+
+[[proxies]]
+name = "harness-https"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8443
+remotePort = 443

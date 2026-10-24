@@ -1,0 +1,40 @@
+{
+    # Only TLS is forwarded through FRP. DNS-01 renewal runs separately.
+    auto_https off
+    https_port 8443
+    # Redact URLs/queries from unexpected reverse-proxy error logs.
+    log default {
+        level FATAL
+    }
+}
+
+(common) {
+    bind 127.0.0.1
+    tls /etc/harness-gateway/tls/fullchain.pem /etc/harness-gateway/tls/key.pem
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        Referrer-Policy "no-referrer"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        -Server
+    }
+}
+
+https://agent.example.com {
+    import common
+    reverse_proxy 127.0.0.1:4180 {
+        header_up -X-Forwarded-For
+        flush_interval -1
+    }
+}
+
+https://auth.example.com {
+    import common
+    # Initial administrator must be provisioned over loopback first.
+    @setup path /setup /setup/* /api/signup/setup
+    respond @setup 404
+    reverse_proxy 127.0.0.1:1411 {
+        # FRP hides the actual client IP; never trust a browser-supplied value.
+        header_up -X-Forwarded-For
+    }
+}

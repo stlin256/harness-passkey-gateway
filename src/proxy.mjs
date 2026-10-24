@@ -41,6 +41,7 @@ export class Proxy {
       reply(response, 413, 'Request too large'); return;
     }
     const authCookie = await this.harness.cookie();
+    if (!this.store.byId(session.id)) throw new Error('Session expired');
     const upstream = http.request(new URL(request.url, this.config.upstream), {
       method: request.method, headers: this.upstreamHeaders(request, authCookie),
     }, incoming => {
@@ -81,6 +82,7 @@ export class Proxy {
       socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n'); return;
     }
     const authCookie = await this.harness.cookie();
+    if (!this.store.byId(session.id)) throw new Error('Session expired');
     const upstream = http.request(new URL(request.url, this.config.upstream), {
       headers: this.upstreamHeaders(request, authCookie, true),
     });

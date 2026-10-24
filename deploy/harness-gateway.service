@@ -1,0 +1,28 @@
+[Unit]
+Description=Harness Passkey Gateway
+After=network-online.target pocket-id.service deepseek-harness.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=harness-gateway
+Group=harness-gateway
+SupplementaryGroups=harness-access
+WorkingDirectory=/opt/harness-passkey-gateway
+EnvironmentFile=/etc/harness-gateway/gateway.env
+ExecStart=/usr/local/bin/node /opt/harness-passkey-gateway/src/server.mjs
+Restart=on-failure
+RestartSec=5
+StateDirectory=harness-gateway
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectProc=invisible
+RestrictSUIDSGID=true
+ReadWritePaths=/var/lib/harness-gateway
+
+[Install]
+WantedBy=multi-user.target

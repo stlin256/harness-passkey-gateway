@@ -29,10 +29,12 @@ export function redirect(response, path, setCookies) {
 }
 export const originOK = (request, config) => request.headers.origin === config.publicUrl.origin;
 export function requestURL(request, config) {
-  if (request.headers.host !== config.publicUrl.host || !request.url?.startsWith('/') || request.url.startsWith('//')) {
+  if (request.headers.host !== config.publicUrl.host || !request.url?.startsWith('/') || request.url.startsWith('//') || request.url.includes('\\')) {
     throw new Error('Invalid request authority');
   }
-  return new URL(request.url, config.publicUrl);
+  const url = new URL(request.url, config.publicUrl);
+  if (url.origin !== config.publicUrl.origin) throw new Error('Invalid request origin');
+  return url;
 }
 export function landing() {
   return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

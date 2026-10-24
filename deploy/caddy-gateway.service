@@ -1,0 +1,28 @@
+[Unit]
+Description=HTTPS ingress for Harness and Pocket ID
+After=network-online.target harness-gateway.service pocket-id.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=caddy
+Group=caddy
+Environment=HOME=/var/lib/caddy
+WorkingDirectory=/var/lib/caddy
+ExecStart=/usr/local/bin/caddy run --config /etc/harness-gateway/Caddyfile --adapter caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /etc/harness-gateway/Caddyfile --adapter caddyfile
+Restart=on-failure
+RestartSec=5
+StateDirectory=caddy
+StateDirectoryMode=0700
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectProc=invisible
+RestrictSUIDSGID=true
+ReadWritePaths=/var/lib/caddy
+
+[Install]
+WantedBy=multi-user.target
