@@ -66,9 +66,9 @@ Start `harness-gateway.service`. Its health route reports that the process is ru
 
 ## 5. Add HTTPS and optional FRP
 
-Provision a valid certificate for both HTTPS origins and configure automatic renewal before relying on persistent access. Keep the TLS private key readable only by root and the TLS proxy user. Renewals must reload Caddy. Back up the identity encryption key and database as well as the gateway database.
+Provision a valid certificate for both HTTPS origins and configure automatic renewal before relying on persistent access. Keep the TLS private key readable only by root and the TLS proxy user. With the Caddy admin API disabled, renewals must restart the Caddy service; this briefly disconnects active streams. Back up the identity encryption key and database as well as the gateway database.
 
-The supplied Caddy configuration uses a non-privileged local TLS port 8443. Bind it to a private interface when FRP runs on a different host. Keep backend ports 1411, 4180, and 3080 on loopback. Do not expose the Caddy admin API.
+The supplied Caddy configuration uses a non-privileged local TLS port 8443. Bind it to a private interface when FRP runs on a different host. Keep backend ports 1411, 4180, and 3080 on loopback. Keep the Caddy admin API disabled, including on loopback: a local agent process must not be able to rewrite ingress configuration.
 
 If using FRP, forward public TCP 443 to the private TLS listener. Run a separate frpc service so that gateway changes do not interrupt an existing SSH tunnel. Pin the client version to one supported by the relay. The example supports FRP 0.67; it does not require upgrading the relay.
 
