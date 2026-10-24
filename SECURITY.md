@@ -26,3 +26,9 @@ Sessions must have independent absolute and inactivity deadlines. Refreshing act
 ## Reporting
 
 Report vulnerabilities privately through the repository's GitHub security reporting feature when available. Do not include credentials in public issues.
+
+## Identity-provider revocation
+
+Removing a passkey at the identity provider prevents future sign-ins with it. It does not automatically delete this gateway's existing browser sessions. Revoke the corresponding gateway session as well; when a device is lost and attribution is uncertain, revoke all gateway sessions after removing the lost credential. Sessions include a bounded browser user-agent label to help operators identify them.
+
+The gateway protects access to a trusted Harness instance. It cannot make a compromised upstream application safe to execute in an authenticated browser.
