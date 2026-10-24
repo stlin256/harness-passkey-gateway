@@ -31,7 +31,7 @@ https://agent.example.com {
 https://auth.example.com {
     import common
     # Initial administrator must be provisioned over loopback first.
-    @setup path /setup /setup/* /api/signup/setup
+    @setup path /setup /setup/* /signup/setup /signup/setup/* /api/signup/setup
     respond @setup 404
     reverse_proxy 127.0.0.1:1411 {
         # FRP hides the actual client IP; never trust a browser-supplied value.

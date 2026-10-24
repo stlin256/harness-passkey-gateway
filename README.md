@@ -4,7 +4,7 @@
 
 **Your agent workspace. Your devices. Your passkeys.**
 
-[中文](readme_zh.md) · [Architecture](docs/architecture.md) · [Security](SECURITY.md)
+[中文](readme_zh.md) · [Architecture](docs/architecture.md) · [Deploy](docs/deployment.md) · [Security](SECURITY.md)
 
 ![Status](https://img.shields.io/badge/status-in%20development-amber)
 ![Runtime](https://img.shields.io/badge/Node.js-24%20LTS-43853d)
@@ -14,7 +14,7 @@
 
 A small, self-hosted access gateway for **DeepSeek Harness**. Sign in with a passkey through an OpenID Connect provider such as **Pocket ID**, then use the Harness browser interface without exposing its process launch token.
 
-> Work in progress. Implementation and deployment documentation are being added in reviewable commits. This project is independent of DeepSeek, Pocket ID, Cloudflare, and frp.
+> Early implementation. Deployment templates are provided; device enrollment and end-to-end authentication require operator validation. This project is independent of DeepSeek, Pocket ID, Cloudflare, and frp.
 
 ## Goals
 
@@ -25,7 +25,7 @@ A small, self-hosted access gateway for **DeepSeek Harness**. Sign in with a pas
 - **Self-hosted ingress:** HTTPS through a reverse proxy, optionally carried by an frp TCP tunnel.
 - **Portable configuration:** examples use reserved domains and contain no deployment credentials.
 
-## Planned architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -37,6 +37,10 @@ flowchart LR
 ```
 
 Passkey enrollment and cryptographic verification belong to the identity provider. This project implements the OIDC relying party, browser sessions, and the Harness authentication bridge.
+
+## Get started
+
+Read the [deployment guide](docs/deployment.md) for isolated service accounts, OIDC provisioning, restricted launch-credential sharing, HTTPS ingress, and device enrollment. The supplied [systemd templates](deploy/) keep identity, session state, TLS keys, and the agent under separate Unix users.
 
 ## Device support
 
