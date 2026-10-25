@@ -26,13 +26,22 @@ export function configuration(env = process.env) {
     throw new Error('HARNESS_UPSTREAM must be a loopback HTTP origin');
   }
   const host = env.LISTEN_HOST || '127.0.0.1';
-  if (!isIP(host) || !['127.0.0.1', '::1'].includes(host)) throw new Error('Gateway listener must be loopback');
+  const privateIPv4 = (value) => {
+    if (isIP(value) !== 4) return false;
+    const [a, b] = value.split('.').map(Number);
+    return a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168);
+  };
+  const trustedProxy = env.TRUSTED_PROXY_IP?.trim() || null;
+  if (trustedProxy && !privateIPv4(trustedProxy)) throw new Error('TRUSTED_PROXY_IP must be a private IPv4 address');
+  if (!['127.0.0.1', '::1'].includes(host) && !(privateIPv4(host) && trustedProxy)) {
+    throw new Error('A private listener requires an explicit trusted proxy');
+  }
   const subjects = new Set(required('ALLOWED_SUBJECTS').split(',').map(x => x.trim()).filter(Boolean));
   if (!subjects.size) throw new Error('An explicit subject allowlist is required');
   const maxDays = integer('SESSION_MAX_DAYS', 90, 1, 90);
   const idleDays = integer('SESSION_IDLE_DAYS', 7, 1, maxDays);
   return {
-    publicUrl, issuer, upstream, host, subjects,
+    publicUrl, issuer, upstream, host, subjects, trustedProxy,
     clientId: required('OIDC_CLIENT_ID'), clientSecret: required('OIDC_CLIENT_SECRET'),
     port: integer('LISTEN_PORT', 4180, 1024, 65535),
     database: required('DATABASE_PATH'), launchFile: required('HARNESS_LAUNCH_URL_FILE'),

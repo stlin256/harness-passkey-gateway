@@ -91,6 +91,10 @@ server.on('upgrade', (request, socket, head) => {
   })().catch(() => socket.destroy());
 });
 server.on('clientError', (_error, socket) => socket.destroy());
+// Check the transport peer, never a client-supplied forwarding header.
+server.on('connection', (socket) => {
+  if (config.trustedProxy && socket.remoteAddress !== config.trustedProxy) socket.destroy();
+});
 server.requestTimeout = 300000; server.headersTimeout = 15000;
 server.listen(config.port, config.host, () => console.log(JSON.stringify({ event: 'gateway_started' })));
 const cleanup = setInterval(() => store.prune(), 60000); cleanup.unref();
